@@ -1,4 +1,3 @@
-# Agrobridge
 # AgroBridge
 
 Plataforma inteligente para conexão entre agricultores, fornecedores de insumos e assistência técnica rural.
