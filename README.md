@@ -46,6 +46,86 @@ ODS alinhada: **ODS 2 — Fome Zero e Agricultura Sustentável**
 - **PostgreSQL** — robustez em relacionamentos, essencial para a integridade entre `Solicitacao`, `Cotacao` e `Consultoria`.
 - **Arquitetura em camadas** — isola regras de negócio de apresentação e acesso a dados, favorecendo o desenvolvimento incremental (1ª entrega: modelagem; 2ª entrega: implementação).
 
-## Status
+## Estrutura do projeto
 
-🔧 Em desenvolvimento — 1ª entrega (Bimestre 1): documento de concepção, diagrama de classe e DER.
+```
+agrobridge/
+├── pom.xml                      -> build Maven (driver PostgreSQL + exec)
+├── README.md
+├── database/database.sql        -> script SQL (tabelas + dados de exemplo)
+├── docs/                        -> PDF da 1ª entrega e diagramas (classe e DER)
+└── src/main/
+    ├── java/com/agrobridge/
+    │   ├── Main.java            -> ponto de entrada
+    │   ├── model/               -> entidades (Usuario abstrata, Notificavel, subclasses)
+    │   ├── dao/                 -> acesso ao PostgreSQL via JDBC (CRUD)
+    │   ├── service/             -> regras de negócio (cotações, consultorias, histórico, notificações)
+    │   ├── view/                -> menus de console
+    │   └── util/                -> ConnectionFactory, SenhaUtil, Validador
+    └── resources/db.properties  -> configuração da conexão
+```
+
+## Pilares de POO aplicados
+
+| Pilar | Onde |
+|---|---|
+| Interface | `Notificavel` (implementada por `Usuario`); `CrudDAO<T>` (implementada pelos DAOs) |
+| Classe abstrata | `Usuario`, `UsuarioDAO<T>`, `MenuCrud`, `MenuUsuario<T>` |
+| Herança | `Agricultor`, `Fornecedor`, `Agronomo` estendem `Usuario`; `AgricultorDAO`, `FornecedorDAO`, `AgronomoDAO` estendem `UsuarioDAO` |
+| Polimorfismo (`@Override`) | `enviarNotificacao()` sobrescrito em cada subclasse e chamado via `Notificavel` em `AgroBridgeService.notificar()` |
+| Composição 1:N | `Agricultor` possui uma lista de `PropriedadeRural` |
+
+## Requisitos x implementação
+
+| Requisito | Onde está no código |
+|---|---|
+| 1 - Cadastro de agricultores com propriedade | Menu 1 (`MenuAgricultor`, `AgricultorDAO`) |
+| 2 - Cadastro de fornecedores | Menu 2 (`MenuFornecedor`, `FornecedorDAO`) |
+| 3 - Cadastro de agrônomos | Menu 3 (`MenuAgronomo`, `AgronomoDAO`) |
+| 4 - Solicitação de cotação | Menu 5 (`AgroBridgeService.solicitarCotacao`) |
+| 5 - Cotações e comparação de propostas | Menu 6 (`registrarCotacao`, `compararCotacoes`) |
+| 6 - Consultorias técnicas | Menu 7 (`registrarConsultoria`) |
+| 7 - Histórico por propriedade | Menu 8 (`historicoPropriedade`) |
+| 8 - Notificações por perfil | `enviarNotificacao()` polimórfico (menu 10 e fluxos de cotação/consultoria) |
+
+O CRUD completo (Create, Read, Update, Delete) da entidade principal, `Agricultor`, está no menu 1; as demais entidades também possuem CRUD completo.
+
+## Como executar
+
+### Pré-requisitos
+
+- Java JDK 17 ou superior (`java -version`)
+- PostgreSQL 14 ou superior em execução
+- Maven 3.8+ (`mvn -version`)
+- Windows, Linux ou macOS
+
+### 1. Criar o banco de dados
+
+```bash
+# Linux/macOS
+psql -U postgres -c "CREATE DATABASE agrobridge;"
+psql -U postgres -d agrobridge -f database/database.sql
+```
+
+```bat
+:: Windows (prompt com o psql no PATH)
+psql -U postgres -c "CREATE DATABASE agrobridge;"
+psql -U postgres -d agrobridge -f database\database.sql
+```
+
+### 2. Configurar a conexão
+
+Edite `src/main/resources/db.properties` com seu usuário e senha do PostgreSQL
+(ou defina as variáveis de ambiente `AGROBRIDGE_DB_URL`, `AGROBRIDGE_DB_USER` e `AGROBRIDGE_DB_PASSWORD`).
+
+### 3. Compilar e executar
+
+```bash
+mvn compile exec:java -Dexec.mainClass=com.agrobridge.Main
+```
+
+O Maven baixa o driver JDBC automaticamente. Ao iniciar, o programa testa a conexão e abre o menu.
+A opção **9 (Demonstração automática)** executa um roteiro completo de CRUD, polimorfismo e fluxo de cotações
+no banco, e remove os dados criados ao final.
+
+No Windows, se os acentos aparecerem errados, execute antes `chcp 65001`.
