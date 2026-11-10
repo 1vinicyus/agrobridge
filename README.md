@@ -129,3 +129,7 @@ A opção **9 (Demonstração automática)** executa um roteiro completo de CRUD
 no banco, e remove os dados criados ao final.
 
 No Windows, se os acentos aparecerem errados, execute antes `chcp 65001`.
+
+## Status
+
+Em desenvolvimento - 2ª entrega (Bimestre 2): código-fonte com POO, CRUD completo e persistência em PostgreSQL.
