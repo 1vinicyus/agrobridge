@@ -136,15 +136,15 @@ SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
 
 -- 8.2 Agricultores
 INSERT INTO agricultor (id, cpf) VALUES
- (1, '11122233344'),
- (2, '22233344455'),
- (3, '33344455566');
+ (1, '52998224725'),
+ (2, '15350946056'),
+ (3, '11144477735');
 
 -- 8.3 Fornecedores
 INSERT INTO fornecedor (id, cnpj, area_atuacao) VALUES
- (4, '11222333000144', 'Fertilizantes e defensivos agrícolas'),
- (5, '22333444000155', 'Sementes certificadas'),
- (6, '33444555000166', 'Insumos agrícolas em geral');
+ (4, '11222333000181', 'Fertilizantes e defensivos agrícolas'),
+ (5, '04252011000110', 'Sementes certificadas'),
+ (6, '34028316000103', 'Insumos agrícolas em geral');
 
 -- 8.4 Agrônomos
 INSERT INTO agronomo (id, registro_profissional, especialidade) VALUES
