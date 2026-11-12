@@ -97,9 +97,19 @@ public final class Entrada {
         }
     }
 
-    public static boolean confirmar(String pergunta) {
-        System.out.print(pergunta + " (s/n): ");
-        return proximaLinha().trim().equalsIgnoreCase("s");
+        public static boolean confirmar(String pergunta) {
+        while (true) {
+            System.out.print(pergunta + " (s/n): ");
+            String resposta = proximaLinha().trim().toLowerCase(java.util.Locale.ROOT);
+            if (resposta.equals("s") || resposta.equals("sim") || resposta.equals("y")) {
+                return true;
+            }
+            if (resposta.equals("n") || resposta.equals("nao") || resposta.equals("não")) {
+                System.out.println("  Operação cancelada.");
+                return false;
+            }
+            System.out.println("  Responda com 's' para sim ou 'n' para não.");
+        }
     }
 
     private static String proximaLinha() {
