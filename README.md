@@ -132,6 +132,8 @@ cp src/main/resources/db.properties.example src/main/resources/db.properties
 copy src\main\resources\db.properties.example src\main\resources\db.properties
 ```
 
+Se preferir, você pode simplesmente renomear o arquivo `db.properties.example` para `db.properties` no explorador de arquivos — o efeito é o mesmo.
+
 Em seguida, edite `src/main/resources/db.properties` e substitua `SUA_SENHA_AQUI` pela senha do usuário `postgres` definida na instalação.
 
 Alternativamente, defina as variáveis de ambiente `AGROBRIDGE_DB_URL`, `AGROBRIDGE_DB_USER` e `AGROBRIDGE_DB_PASSWORD`, que têm prioridade sobre o arquivo.
