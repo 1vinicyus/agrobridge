@@ -112,6 +112,7 @@ psql -U postgres -d agrobridge -f database/database.sql
 psql -U postgres -c "CREATE DATABASE agrobridge;"
 psql -U postgres -d agrobridge -f database\database.sql
 ```
+No Windows, execute `\encoding UTF8` dentro do psql antes de carregar o script, e use barras normais no caminho do arquivo (ex.: `\i 'C:/caminho/database/database.sql'`). Sem isso, o script falha nos acentos e desfaz tudo.
 
 ### 2. Configurar a conexão
 
@@ -129,6 +130,9 @@ A opção **9 (Demonstração automática)** executa um roteiro completo de CRUD
 no banco, e remove os dados criados ao final.
 
 No Windows, se os acentos aparecerem errados, execute antes `chcp 65001`.
+
+### Refinamentos da 2ª entrega
+Durante a implementação, alguns tipos do diagrama de classe foram ajustados: `quantidade`, `areaHectares` e `preco` usam `BigDecimal` em vez de `double`, para precisão decimal em valores monetários e de medida; datas usam `LocalDateTime`. O acesso a dados foi isolado na camada DAO, conforme a arquitetura em camadas prevista na 1ª entrega.
 
 ## Status
 
