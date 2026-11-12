@@ -99,22 +99,32 @@ public class Demonstracao {
                     "Solo com pH baixo.", "Aplicar calcário antes do plantio."));
             MenuPrincipal.imprimirHistorico(service.historicoPropriedade(propriedade.getId()));
         } finally {
-            titulo("7) DELETE - removendo os dados da demonstração");
-            if (agricultor != null && agricultor.getId() != null) {
-                System.out.println("  Agricultor excluído (cascata nas propriedades, solicitações, cotações e consultorias): "
-                        + agricultorDAO.excluir(agricultor.getId()));
-                System.out.println("  Ainda existe no banco? " + agricultorDAO.buscarPorId(agricultor.getId()).isPresent());
+            boolean criouAlgo = (agricultor != null && agricultor.getId() != null)
+                    || (fornecedorA != null && fornecedorA.getId() != null)
+                    || (fornecedorB != null && fornecedorB.getId() != null)
+                    || (agronomo != null && agronomo.getId() != null);
+            if (criouAlgo) {
+                titulo("7) DELETE - removendo os dados da demonstração");
+                try {
+                    if (agricultor != null && agricultor.getId() != null) {
+                        System.out.println("  Agricultor excluído (cascata nas propriedades, solicitações, cotações e consultorias): "
+                                + agricultorDAO.excluir(agricultor.getId()));
+                        System.out.println("  Ainda existe no banco? " + agricultorDAO.buscarPorId(agricultor.getId()).isPresent());
+                    }
+                    if (fornecedorA != null && fornecedorA.getId() != null) {
+                        fornecedorDAO.excluir(fornecedorA.getId());
+                    }
+                    if (fornecedorB != null && fornecedorB.getId() != null) {
+                        fornecedorDAO.excluir(fornecedorB.getId());
+                    }
+                    if (agronomo != null && agronomo.getId() != null) {
+                        agronomoDAO.excluir(agronomo.getId());
+                    }
+                    System.out.println("  Demonstração concluída.");
+                } catch (RuntimeException e) {
+                    System.out.println("  Aviso: não foi possível remover todos os dados da demonstração: " + e.getMessage());
+                }
             }
-            if (fornecedorA != null && fornecedorA.getId() != null) {
-                fornecedorDAO.excluir(fornecedorA.getId());
-            }
-            if (fornecedorB != null && fornecedorB.getId() != null) {
-                fornecedorDAO.excluir(fornecedorB.getId());
-            }
-            if (agronomo != null && agronomo.getId() != null) {
-                agronomoDAO.excluir(agronomo.getId());
-            }
-            System.out.println("  Demonstração concluída.");
         }
     }
 
