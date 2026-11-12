@@ -120,8 +120,21 @@ Atenção ao caminho: use barras normais `/` (o psql ignora as barras invertidas
 
 ### 2. Configurar a conexão
 
-Edite `src/main/resources/db.properties` com seu usuário e senha do PostgreSQL
-(ou defina as variáveis de ambiente `AGROBRIDGE_DB_URL`, `AGROBRIDGE_DB_USER` e `AGROBRIDGE_DB_PASSWORD`).
+O arquivo `db.properties` não é versionado (contém credenciais). Crie o seu a partir do modelo:
+
+```bash
+# Linux/macOS
+cp src/main/resources/db.properties.example src/main/resources/db.properties
+```
+
+```bat
+:: Windows
+copy src\main\resources\db.properties.example src\main\resources\db.properties
+```
+
+Em seguida, edite `src/main/resources/db.properties` e substitua `SUA_SENHA_AQUI` pela senha do usuário `postgres` definida na instalação.
+
+Alternativamente, defina as variáveis de ambiente `AGROBRIDGE_DB_URL`, `AGROBRIDGE_DB_USER` e `AGROBRIDGE_DB_PASSWORD`, que têm prioridade sobre o arquivo.
 
 ### 3. Compilar e executar
 
