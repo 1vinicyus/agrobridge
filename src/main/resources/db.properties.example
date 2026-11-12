@@ -1,0 +1,4 @@
+db.driver=org.postgresql.Driver
+db.url=jdbc:postgresql://localhost:5432/agrobridge
+db.user=postgres
+db.password=SUA_SENHA_AQUI
