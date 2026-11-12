@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class AgricultorDAO extends UsuarioDAO<Agricultor> {
@@ -51,5 +52,15 @@ public class AgricultorDAO extends UsuarioDAO<Agricultor> {
         agricultor.ifPresent(a -> new PropriedadeRuralDAO().listarPorAgricultor(a.getId())
                 .forEach(a::adicionarPropriedade));
         return agricultor;
+    }
+
+        /** Ao listar, carrega as propriedades de cada agricultor (composição 1:N). */
+    @Override
+    public List<Agricultor> listarTodos() {
+        List<Agricultor> agricultores = super.listarTodos();
+        PropriedadeRuralDAO propriedadeDAO = new PropriedadeRuralDAO();
+        agricultores.forEach(a -> propriedadeDAO.listarPorAgricultor(a.getId())
+                .forEach(a::adicionarPropriedade));
+        return agricultores;
     }
 }
