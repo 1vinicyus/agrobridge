@@ -44,7 +44,8 @@ public class Demonstracao {
         try {
             titulo("1) CREATE - cadastrando agricultor e propriedade no PostgreSQL");
             agricultor = new Agricultor(null, "Demo Agricultor " + sufixo, "agri" + sufixo + "@demo.com",
-                    SenhaUtil.gerarHash("123456"), "(44) 90000-0001", String.format("%011d", Long.parseLong(sufixo)));
+                                        SenhaUtil.gerarHash("123456"), "(44) 90000-0001",
+                                        cpfValido(String.format("%09d", Long.parseLong(sufixo) % 1_000_000_000L)));
             agricultorDAO.criar(agricultor);
             System.out.println("  " + agricultor);
             PropriedadeRural propriedade = propriedadeDAO.criar(new PropriedadeRural(null, agricultor.getId(),
@@ -126,6 +127,21 @@ public class Demonstracao {
                 }
             }
         }
+    }
+
+        /** Gera um CPF com dígitos verificadores válidos a partir dos 9 primeiros dígitos. */
+    private static String cpfValido(String base9) {
+        StringBuilder cpf = new StringBuilder(base9);
+        for (int rodada = 0; rodada < 2; rodada++) {
+            int soma = 0;
+            int peso = cpf.length() + 1;
+            for (int i = 0; i < cpf.length(); i++) {
+                soma += (cpf.charAt(i) - '0') * peso--;
+            }
+            int resto = soma % 11;
+            cpf.append(resto < 2 ? 0 : 11 - resto);
+        }
+        return cpf.toString();
     }
 
     private static void titulo(String texto) {
