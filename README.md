@@ -107,12 +107,16 @@ psql -U postgres -c "CREATE DATABASE agrobridge;"
 psql -U postgres -d agrobridge -f database/database.sql
 ```
 
-```bat
-:: Windows (prompt com o psql no PATH)
-psql -U postgres -c "CREATE DATABASE agrobridge;"
-psql -U postgres -d agrobridge -f database\database.sql
+**Windows:** o psql costuma falhar ao ler o script por causa dos acentos. Abra o **SQL Shell (psql)** pelo menu Iniciar, pressione Enter nas quatro primeiras perguntas e digite a senha do usuário `postgres`. Depois execute os comandos abaixo, **um por linha**:
+
 ```
-No Windows, execute `\encoding UTF8` dentro do psql antes de carregar o script, e use barras normais no caminho do arquivo (ex.: `\i 'C:/caminho/database/database.sql'`). Sem isso, o script falha nos acentos e desfaz tudo.
+CREATE DATABASE agrobridge;
+\c agrobridge
+\encoding UTF8
+\i 'C:/caminho/completo/agrobridge/database/database.sql'
+```
+
+Atenção ao caminho: use barras normais `/` (o psql ignora as barras invertidas `\` do Windows) e inclua o nome do arquivo `database.sql` no final. Se a saída terminar em `COMMIT`, deu certo; se terminar em `ROLLBACK`, o script não foi aplicado.
 
 ### 2. Configurar a conexão
 
